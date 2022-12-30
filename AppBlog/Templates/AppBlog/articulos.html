@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                {% if mensaje %}
+                    <div class="alert alert-danger">{{ mensaje }}</div>
+                {% endif %}
+                {% for articulo in articulos %}
+                <div class="col-sm-4">
+                    <div class="card">
+                        <img class="img-thumbnail" src="{{ articulo.imagen.url }}" alt="..." onmouseover=" this.style.transition='0.5s', this.style.opacity='50%'"
+                        onmouseout=" this.style.transition='0.5s', this.style.opacity='70%';"/>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ articulo.titulo }}</h5>
+                            <p class="card-text">{{ articulo.subtitulo }}</p>
+                            
+                        </div>
+                        <div class="card-footer text-muted p-0">
+                                <small><strong> Publicado el: {{ articulo.fecha_publicacion }}</strong></small><br>
+                                <a  id="leerMas" class="btn btn-primary" href="{% url 'detalleArticulo' articulo.ide %}" role="button">Leer Mas</a>
+                                {% if user.is_authenticated %}
+                                    <a  id="Editar" class="btn btn-warning" href="{% url 'editarArticulo' articulo.ide %}" role="button">Editar</a>
+                                    {% if user.is_superuser %}
+                                        <a  id="Eliminar" class="btn btn-danger" href="{% url 'eliminarArticulo' articulo.ide %}" role="button">Eliminar</a>
+                                    {% endif %}
+                                {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

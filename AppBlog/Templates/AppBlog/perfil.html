@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <ul>
+                <h1>Opciones</h1>
+                <li><a href="{% url 'editarPerfil' %}">Editar Perfil</a></li>
+                <li><a href="{% url 'articulos' %}">Articulos</a></li>
+                <li><a href="{% url 'crearArticulo' %}">Crear Articulo</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+            </ul>
+            <ul>
+                <h1>Mensajeria</h1>
+                {% if mensajeNuevo %}
+                    <li><a href="{% url 'mensajes' %}">Tienes Mensajes Nuevo</a></li>
+                {% else %}
+                    <li>No tienes Mensajes nuevos</li>
+                {% endif %}
+                
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <h1>Perfil usuario</h1>
+            <p><strong>{{mensaje}}</strong></p>
+            <div class="card">
+                {% if avatar %}
+                <img src="{{ avatar }}" alt="" width="150px" height="100px" class="img-thumbnail">
+                {% else %}
+                <img src="{% static 'img/avatar.png' %}" alt="" width="100px" height="100px" class="img-thumbnail">
+                {% endif %}
+                <div class="card-body">
+                    <div class="card-title">
+                        <p> <strong>Nombre Usuario:</strong> {{user.username}}</p>
+                    </div>
+                    <div class="card-text">
+                        <p><strong>Correo:</strong> {{user.email}}</p>
+                        {% if user.first_name %}
+                        <p><strong>Nombre:</strong> {{user.first_name}}</p>
+                        {% else %}
+                        <p><strong>Nombre:</strong> Aun No tiene un nombre asignado, edite su perfil para agregarlo </p>
+                        {% endif %}
+                        {% if user.last_name %}
+                        <p><strong>Apellido:</strong> {{user.last_name}}</p>
+                        {% else %}
+                        <p><strong>Apellido:</strong> Aun No tiene un Apellido asignado, edite su perfil para agregarlo
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <strong>Seleccione una imagen para que sea su avatar </strong>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group mb-1">
+                        {{avatarForm.imagen}}
+                    </div>
+                    <div class="form-group mt-1">
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+            {% if mensaje_avatar_form %}
+            <div class="alert alert-success" role="alert">
+                {{mensaje_avatar_form}}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

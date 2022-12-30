@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        {% if mensaje %}
+        <div class="alert alert-success d-flex align-items-center">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                <use xlink:href="#check-circle-fill" />
+            </svg>
+            <p> {{ mensaje }}</p>
+        </div>
+        {% endif %}
+        <div class="form-group p-3">
+            <h1>Crear Articulo</h1>
+            <form action="" method="post" class="form-control" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-group">
+
+                    {{ field.label_tag }}
+                    <div class="form-control"> {{ field }} </div>
+                    <small>{{ field.errors }}</small>
+                </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-success" value="Agregar Articulo">
+
+
+            </form>
+            <div class="alert alert-danger d-flex align-items-center">
+                <div> Para ver los articulos publicados haz click <a href="{% url 'articulos' %}"> Aqui </a> </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

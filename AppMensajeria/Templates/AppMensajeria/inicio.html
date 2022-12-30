@@ -1,0 +1,80 @@
+{% extends "AppBlog/base.html" %}
+
+{% block contenido %}
+<div class="row m-1">
+    <div class="col-sm-3 p-1 bg-secondary text-white rounded ">
+        <h4>Lista de usuario:</h4>
+        <hr>
+        <em><strong> Seleccion un usuario para enviar el mensaje o ver sus mensajes</strong></em>
+        <hr>
+        <ul class="bg-secondary">
+            {% for usuario in usuarios %}
+            {% if usuario.id != user.id %}
+            <li> <a href="{% url 'mensajes' usuario.id %}"> {{usuario.username}}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <hr>
+        <div class="form-group bg-secondary ">
+            {% if mensaje %}
+            <div class="alert alert-warning">{{mensaje}}</div>
+            {% endif %}
+            <form action="" method="post" class="form-control  bg-secondary">
+
+                {% csrf_token %}
+
+                <h4 class="text-white"> Enviar mensaje a:</h4>
+                <h3 class="text-white"> {{destinatario}}</h3>
+                <input type="hidden" name="destinatario" id="destinatario" value="{{destinatario.id}}" required>
+                <hr>
+                <div class="text-white p-2">
+                    {{formMensaje | safe}}
+                </div>
+                <hr>
+                <input type="submit" class="btn btn-primary btn-lg btn-block">
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="form-group bg-secondary p-2">
+            <h3 class="text-white">Conversacion con: {{destinatario}}</h3>
+            <hr>
+            <ul>
+                {% if chat %}
+                {% for mensaje in chat %}
+                {% if mensaje.userRemitente == user %}
+                <li class="bg-light p-0 rounded">
+                    <strong>Yo:</strong>
+                    <strong>{{mensaje.fecha | date:"d/m/Y H:i:s" }}</strong>
+                    {{mensaje.mensaje | safe }}
+                    {% if mensaje.leido == 0 %}
+                    <p><i>Mensaje no Leido</i></p>
+                    {% else %}
+                    <p><i>Mensaje Leido</i></p>
+                    {% endif %}
+                </li>
+                <hr>
+                {% else %}
+                <li class="bg-light rounded">
+                    <strong>Mensaje de: {{mensaje.userRemitente}}:</strong>
+                    <strong>{{mensaje.fecha | date:"d/m/Y H:i:s" }}</strong>
+                    {{mensaje.mensaje | safe }}
+                    {% if mensaje.leido == 0 %}
+                    <a href="{% url 'marcarLeido' mensaje.ide %}" target="_self" rel="noopener noreferrer">Marcar Como
+                        Leido </a>
+                    {% else %}
+                    <p><i>Mensaje Leido</i></p>
+                    {% endif %}
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </ul>
+
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

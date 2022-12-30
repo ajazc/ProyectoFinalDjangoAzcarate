@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block contenido %}
+<div class="row">
+    <div class="col-md-8">
+        <!-- Blog Post -->
+        <div class="card mb-4">
+            {% if articulo %}
+            <!--<img class="card-img-top" src="" alt="Card image cap">-->
+            <div class="card-body">
+                <h1 class="card-title">{{ articulo.titulo }}</h1>
+                <h3 class="card-title">{{ articulo.subtitulo }}</h3>
+                <img class="img-fluid w-100" src="{{ articulo.imagen.url }}" alt="..." />
+                <p class="card-text">{{ articulo.contenido | safe }}</p>
+            </div>
+            <div class="card-footer text-muted">
+                Publicado el {{ fecha_format }} por {{ autor }}
+                <small>
+                    {% if user.is_authenticated %}
+                    {% if user.id == articulo.usuarioFK_id %}
+                    <a id="Editar" class="btn btn-warning" href="{% url 'editarArticulo' articulo.ide %}"
+                        role="button">Editar</a>
+                    {% else %}
+                    {% if user.is_superuser %}
+                    <a id="Eliminar" class="btn btn-danger" href="{% url 'eliminarArticulo' articulo.ide %}"
+                        role="button">Eliminar</a>
+                    <a id="Editar" class="btn btn-warning" href="{% url 'editarArticulo' articulo.ide %}"
+                        role="button">Editar</a>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </small>
+            </div>
+
+            {% if mensaje %}
+            <div class="alert alert-danger">{{ mensaje }}</div>
+            {% endif %}
+            {% else %}
+                <div class="alert alert-danger"><h2>{{mensaje}}</h2></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
